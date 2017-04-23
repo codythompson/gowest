@@ -1,5 +1,5 @@
 require('babel-polyfill')
-var Renderer = require('../renderer')
+var Renderer = require('../src/renderer')
 
 window.canvas = null;
 window.gwgl = null;
