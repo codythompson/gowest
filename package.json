@@ -9,7 +9,7 @@
     "babelify": "^7.3.0"
   },
   "scripts": {
-    "build": "babel src -d build",
+    "build": "mkdir -p build && browserify sandbox.js -t babelify --outfile build/build.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
