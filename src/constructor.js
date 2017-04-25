@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 var check_required = function (required, given, name) {
   required = required || [];
   given = given || {};
@@ -34,15 +36,15 @@ var get_arg_fields = function (arg_fields, args) {
 var constructor = function (const_opts) {
   const_opts = const_opts || {};
 
-  return function Constructor (args) {
+  return function (args) {
     // check for required args and throw an exception if missing
     check_required(const_opts.required, args, const_opts.name);
     // add default vals to args
     args = _.defaults(args || {}, const_opts.defaults);
     // extend "this" for keys found in arg_fields and vals in args
-    _.extend(Constructor, get_arg_fields(const_opts.arg_fields, args));
+    _.extend(this, get_arg_fields(const_opts.fields, args));
     // call init
-    const_opts.init && args.init.call(Constructor, args);
+    const_opts.init && const_opts.init.call(this, args);
   };
 };
 
