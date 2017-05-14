@@ -4,19 +4,17 @@ attribute vec3 aVert;
 // attribute vec4 vertColor;
 // attribute vec4 vertIx;
 
-// uniform mat4 projMat;
-// uniform mat4 mvMat;
+uniform mat4 uProjMat;
+uniform mat4 uMVMat;
 
 // varying lowp vec4 fragVertIx;
 // varying lowp vec4 fragVertColor;
 
 void main() {
-  // vec4 mvPos = mvMat * vec4(vertPos, 1.0);
-  // gl_Position = projMat * mvPos;
+  vec4 mvPos = uMVMat * vec4(aVert, 1.0);
+  gl_Position = uProjMat * mvPos;
   // fragVertColor = vertColor;
   // fragVertIx = vertIx;
-
-  gl_Position = vec4(aVert, 1);
 }
 
 `;
