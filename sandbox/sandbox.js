@@ -8,8 +8,15 @@ window.renderer = null;
 
 window.mat4 = require('gl-matrix').mat4;
 
+window.trans_z = -1;
+window.rot_y = 0;
+
 window.ddd = null;
 function sbdraw () {
+  renderer.mv_mat = mat4.create();
+  mat4.translate(renderer.mv_mat, renderer.mv_mat, [0, 0, trans_z]);
+  mat4.rotate(renderer.mv_mat, renderer.mv_mat, rot_y, [0,1,0]);
+
   gwgl.clearColor(0, 0, 0, 1);
   gwgl.clear(gwgl.COLOR_BUFFER_BIT);
   renderer.draw();
@@ -36,8 +43,6 @@ function sbload () {
     shader_program: shaders.basic_prog
   });
   document.body.appendChild(canvas);
-
-  mat4.translate(renderer.mv_mat, renderer.mv_mat, [0, 0, -0.11]);
 
   sbdraw();
 };

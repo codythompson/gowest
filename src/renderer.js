@@ -1,5 +1,7 @@
 var mat4 = require('gl-matrix').mat4;
 var constructor = require('./constructor');
+var cube_def = require('./shape_defs').cube;
+var concat_f32 = require('./utils').concat_f32;
 
 var Renderer = constructor({
   fields: [
@@ -13,24 +15,22 @@ var Renderer = constructor({
   defaults: {
   },
   init: function (args) {
-    this.vert_arr = this.build_verts();
+    this.vert_arr = this.build_block();
     this.setup_buffers();
     this.setup_attribs();
     this.setup_mats();
     this.setup_uniforms();
   },
 });
-Renderer.prototype.build_verts = function () {
-  var z = 0;
-  var vert_arr = new Float32Array([
-      0, 0, z, //m
-      0, -1, z, //bm
-      1, -1, z, //br
+Renderer.prototype.build_block = function (block) {
+  // var child_mv = mat4.create();
 
-      0, 0, z, //m
-      0, 1, z, //tm
-      -1, 1, z, //bl
-  ]);
+  // todo run each face through child_mv
+  var face_arrs = [];
+  for (let face_arr of cube_def) {
+    face_arrs.push(concat_f32.apply(this, face_arr));
+  }
+  var vert_arr = concat_f32.apply(this, face_arrs);
 
   return vert_arr;
 };
