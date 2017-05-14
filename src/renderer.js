@@ -5,7 +5,8 @@ var Renderer = constructor({
     'scale'
   ],
   required: [
-    'gl'
+    'gl',
+    'shader_program'
   ],
   defaults: {
     scale: new Float32Array([1,1,1]),

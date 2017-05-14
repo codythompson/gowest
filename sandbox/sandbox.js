@@ -1,4 +1,5 @@
 require('babel-polyfill')
+var shaders = require('../src/shaders');
 var Renderer = require('../src/renderer')
 
 window.canvas = null;
@@ -10,8 +11,10 @@ function sbload () {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   gwgl = canvas.getContext('webgl');
+  shaders.init(gwgl);
   renderer = new Renderer({
-    gl: gwgl
+    gl: gwgl,
+    shader_program: shaders.basic_prog
   });
 };
 window.addEventListener('load', sbload);
