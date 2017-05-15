@@ -8,17 +8,21 @@ window.renderer = null;
 
 window.mat4 = require('gl-matrix').mat4;
 
-window.trans_z = -1;
-window.rot_y = 0;
+window.trans_z = -3;
+window.rot_x = Math.PI / 8;
+window.rot_y = Math.PI / 8;
+window.rot_z = 0;
 
 window.ddd = null;
 function sbdraw () {
   renderer.mv_mat = mat4.create();
   mat4.translate(renderer.mv_mat, renderer.mv_mat, [0, 0, trans_z]);
-  mat4.rotate(renderer.mv_mat, renderer.mv_mat, rot_y, [0,1,0]);
+  mat4.rotateZ(renderer.mv_mat, renderer.mv_mat, rot_z);
+  mat4.rotateY(renderer.mv_mat, renderer.mv_mat, rot_y);
+  mat4.rotateX(renderer.mv_mat, renderer.mv_mat, rot_x);
 
   gwgl.clearColor(0, 0, 0, 1);
-  gwgl.clear(gwgl.COLOR_BUFFER_BIT);
+  gwgl.clear(gwgl.COLOR_BUFFER_BIT | gwgl.DEPTH_BUFFER_BIT);
   renderer.draw();
 
   if (!ddd) {
@@ -37,6 +41,7 @@ function sbload () {
   canvas.style.left = '0';
   canvas.style.top = '0';
   gwgl = canvas.getContext('webgl');
+  gwgl.enable(gwgl.DEPTH_TEST);
   shaders.init(gwgl);
   renderer = new Renderer({
     gl: gwgl,

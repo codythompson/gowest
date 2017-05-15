@@ -15,7 +15,7 @@ var Renderer = constructor({
   defaults: {
   },
   init: function (args) {
-    this.vert_arr = this.build_block();
+    this.build_block();
     this.setup_buffers();
     this.setup_attribs();
     this.setup_mats();
@@ -27,18 +27,32 @@ Renderer.prototype.build_block = function (block) {
 
   // todo run each face through child_mv
   var face_arrs = [];
+  var face_ix_arr = [];
   for (let face_arr of cube_def) {
     face_arrs.push(concat_f32.apply(this, face_arr));
+    face_ix_arr.push(new Float32Array([
+      1, 0, 0, 1,
+      1, 1, 0, 0,
+      0, 1, 1, 0,
+
+      0, 1, 1, 0,
+      0, 0, 1, 1,
+      1, 0, 0, 1
+    ]));
   }
   var vert_arr = concat_f32.apply(this, face_arrs);
+  var vert_ix_arr = concat_f32.apply(this, face_ix_arr);
 
-  return vert_arr;
+  this.vert_arr = vert_arr;
+  this.vert_ix_arr = vert_ix_arr;
 };
 Renderer.prototype.setup_buffers = function () {
   this.vert_buffer = this.gl.createBuffer();
+  this.vert_ix_buffer = this.gl.createBuffer();
 };
 Renderer.prototype.setup_attribs = function () {
   this.vert_attrib = this.gl.getAttribLocation(this.shader_program, 'aVert');
+  this.vert_ix_attrib = this.gl.getAttribLocation(this.shader_program, 'aVertIx');
 };
 Renderer.prototype.setup_mats = function () {
   this.persp_mat = mat4.create();
@@ -53,6 +67,8 @@ Renderer.prototype.setup_uniforms = function () {
 Renderer.prototype.buffer_data = function () {
   this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vert_buffer);
   this.gl.bufferData(this.gl.ARRAY_BUFFER, this.vert_arr, this.gl.STATIC_DRAW);
+  this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vert_ix_buffer);
+  this.gl.bufferData(this.gl.ARRAY_BUFFER, this.vert_ix_arr, this.gl.STATIC_DRAW);
 };
 Renderer.prototype.set_uniforms = function () {
   this.gl.uniformMatrix4fv(this.proj_uni, false, this.persp_mat);
@@ -60,9 +76,11 @@ Renderer.prototype.set_uniforms = function () {
 };
 Renderer.prototype.enable_attribs = function () {
   this.gl.enableVertexAttribArray(this.vert_attrib);
+  this.gl.enableVertexAttribArray(this.vert_ix_attrib);
 };
 Renderer.prototype.disable_attribs = function () {
   this.gl.disableVertexAttribArray(this.vert_attrib);
+  this.gl.disableVertexAttribArray(this.vert_ix_attrib);
 };
 Renderer.prototype.draw = function () {
   this.buffer_data();
@@ -72,6 +90,8 @@ Renderer.prototype.draw = function () {
   gl.useProgram(this.shader_program);
   gl.bindBuffer(gl.ARRAY_BUFFER, this.vert_buffer);
   gl.vertexAttribPointer(this.vert_attrib, 3, gl.FLOAT, false, 0, 0);
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.vert_ix_buffer);
+  gl.vertexAttribPointer(this.vert_ix_attrib, 4, gl.FLOAT, false, 0, 0);
   this.set_uniforms();
   gl.drawArrays(gl.TRIANGLES, 0, this.vert_arr.length / 3);
 
