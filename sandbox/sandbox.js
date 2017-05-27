@@ -57,6 +57,12 @@ function sbload () {
     children_ns: 2,
     children_tb: 2
   });
+  var super_build_child = bb.build_child;
+  bb.build_child = function (we, ns, tb) {
+    var child_obj = super_build_child(we, ns, tb);
+    child_obj.color = 0xff8800;
+    return child_obj;
+  };
   console.log(bb.build());
   console.log('TODO why the black screen');
   renderer.build_block(bb.build());

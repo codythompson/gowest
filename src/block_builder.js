@@ -39,6 +39,13 @@ BlockBuilder.prototype.set_children_tb = function (count) {
   this.children_tb = count;
   return this;
 };
+BlockBuilder.prototype.build_child = function (we, ns, tb) {
+  return {
+    we: we,
+    ns: ns,
+    tb: tb
+  };
+};
 
 BlockBuilder.prototype.build = function () {
   var block = {
@@ -51,11 +58,7 @@ BlockBuilder.prototype.build = function () {
     for (let ns = 0; ns < this.children_ns; ns++) {
       var tb_arr = [];
       for (let tb = 0; tb < this.children_tb; tb++) {
-        tb_arr.push({
-          we: we,
-          ns: ns,
-          tb: tb
-        });
+        tb_arr.push(this.build_child());
       }
       ns_arr.push(tb_arr);
     }
