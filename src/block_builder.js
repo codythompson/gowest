@@ -63,4 +63,8 @@ BlockBuilder.prototype.build = function () {
   }
 
   block.children = we_arr;
+
+  return block;
 };
+
+module.exports = BlockBuilder;

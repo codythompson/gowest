@@ -1,16 +1,21 @@
 require('babel-polyfill')
 var shaders = require('../src/shaders');
 var Renderer = require('../src/renderer');
+var BlockBuilder = require('../src/block_builder');
 
 window.canvas = null;
 window.gwgl = null;
 window.renderer = null;
+window.BlockBuilder = BlockBuilder;
 
 window.mat4 = require('gl-matrix').mat4;
+window.vec4 = require('gl-matrix').vec4;
 
 window.trans_z = -3;
-window.rot_x = Math.PI / 8;
-window.rot_y = Math.PI / 8;
+window.rot_x = 0;
+// window.rot_x = Math.PI / 8;
+window.rot_y = 0;
+// window.rot_y = Math.PI / 8;
 window.rot_z = 0;
 
 window.ddd = null;
@@ -47,6 +52,14 @@ function sbload () {
     gl: gwgl,
     shader_program: shaders.basic_prog
   });
+  var bb = new BlockBuilder({
+    children_we: 2,
+    children_ns: 2,
+    children_tb: 2
+  });
+  console.log(bb.build());
+  console.log('TODO why the black screen');
+  renderer.build_block(bb.build());
   document.body.appendChild(canvas);
 
   sbdraw();
