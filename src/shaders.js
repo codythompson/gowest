@@ -2,19 +2,19 @@ var basic_vert = `
 
 attribute vec3 aVert;
 attribute vec4 aVertIx;
-// attribute vec4 vertColor;
+attribute vec3 aVertColor;
 
 uniform mat4 uProjMat;
 uniform mat4 uMVMat;
 
 varying lowp vec4 vVertIx;
-// varying lowp vec4 fragVertColor;
+varying lowp vec3 vVertColor;
 
 void main() {
   vec4 mvPos = uMVMat * vec4(aVert, 1.0);
   gl_Position = uProjMat * mvPos;
-  // fragVertColor = vertColor;
   vVertIx = aVertIx;
+  vVertColor = aVertColor;
 }
 
 `;
@@ -22,14 +22,14 @@ void main() {
 var basic_frag = `
 
 varying lowp vec4 vVertIx;
-// varying lowp vec4 fragVertColor;
+varying lowp vec3 vVertColor;
 
 void main() {
   // adapted from http://codeflow.org/entries/2012/aug/02/easy-wireframe-display-with-barycentric-coordinates/
   if (any(lessThan(vVertIx, vec4(0.02)))) {
     gl_FragColor = vec4(0, 0, 1, 1);
   } else {
-    gl_FragColor = vec4(1, 1, 1, 1);
+    gl_FragColor = vec4(vVertColor, 1);
   }
 }
 
