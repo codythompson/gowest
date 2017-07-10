@@ -32,6 +32,8 @@ function sbdraw () {
 
   if (!ddd) {
     requestAnimationFrame(sbdraw);
+  } else {
+    console.log('exiting');
   }
 };
 
@@ -71,3 +73,13 @@ function sbload () {
   sbdraw();
 };
 window.addEventListener('load', sbload);
+
+window.addEventListener('blur', function () {
+  console.log('blur');
+  window.ddd = true;
+});
+// window.addEventListener('focus', function () {
+//   console.log('focus');
+  // window.ddd = false;
+  // sbdraw();
+// });
