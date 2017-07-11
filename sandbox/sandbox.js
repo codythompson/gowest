@@ -11,19 +11,21 @@ window.BlockBuilder = BlockBuilder;
 window.mat4 = require('gl-matrix').mat4;
 window.vec4 = require('gl-matrix').vec4;
 
+window.trans_x = 0;
+window.trans_y = -1;
 window.trans_z = -4;
 // window.rot_x = 0;
-window.rot_x = Math.PI / 8;
-// window.rot_y = 0;
-window.rot_y = Math.PI / 8;
+window.rot_x = 5 * Math.PI / 8;
+window.rot_y = 0;
+// window.rot_y = Math.PI / 8;
 window.rot_z = 0;
 
-window.rot_order = 'xyz';
+window.rot_order = 'zyx';
 
 window.ddd = null;
 function sbdraw () {
   renderer.mv_mat = mat4.create();
-  mat4.translate(renderer.mv_mat, renderer.mv_mat, [0, 0, trans_z]);
+  mat4.translate(renderer.mv_mat, renderer.mv_mat, [trans_x, trans_y, trans_z]);
 
   if (rot_order === 'xyz') {
     mat4.rotateX(renderer.mv_mat, renderer.mv_mat, rot_x);
@@ -74,8 +76,8 @@ function sbload () {
     shader_program: shaders.basic_prog
   });
   window.bb = new BlockBuilder({
-    children_we: 2,
-    children_ns: 2,
+    children_we: 3,
+    children_ns: 3,
     children_tb: 2
   });
   var super_build_child = bb.build_child;
@@ -92,11 +94,11 @@ function sbload () {
 
   sbdraw();
 
-  var ival = setInterval(function () {
-    rot_y += Math.PI / 512;
-  }, 20);
+  // var ival = setInterval(function () {
+  //   rot_y += Math.PI / 512;
+  // }, 20);
   setTimeout(function () {
-    clearInterval(ival);
+    // clearInterval(ival);
     window.ddd = true;
   }, 30000);
 };
